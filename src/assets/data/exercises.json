@@ -1,0 +1,25 @@
+{
+    "exercises" : [
+        {
+            "name" : "push ups",
+            "reps" : 1,
+            "weight" : 1,
+            "videourl" : "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            "comments" : "haha arms go brrrr"
+        }, 
+        {
+            "name" : "sit ups",
+            "reps" : 1,
+            "weight" : 1,
+            "videourl" : "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            "comments" : "haha abs go brrrr"
+        }, 
+        {
+            "name" : "squats",
+            "reps" : 1,
+            "weight" : 1,
+            "videourl" : "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            "comments" : "haha legs go brrrr"
+        }
+    ]
+}
