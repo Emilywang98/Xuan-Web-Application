@@ -21,6 +21,8 @@ import { NavLink } from "react-router-dom";
 import { Nav } from "reactstrap";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
+import styled from "styled-components";
+import { FiRefreshCcw } from "react-icons/fi";
 
 import logo from "xuan_logo.png";
 
@@ -32,6 +34,7 @@ function Sidebar(props) {
   const activeRoute = (routeName) => {
     return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
+
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(sidebar.current, {
@@ -45,87 +48,19 @@ function Sidebar(props) {
       }
     };
   });
+
   return (
-    <div
-      className="sidebar"
-      data-color={props.bgColor}
-      data-active-color={props.activeColor}
-    >
+    <div className="sidebar" data-color={"black"} data-active-color={"blue"}>
       <div className="logo">
-        <a
-        // href="https://www.creative-tim.com"
-        // className="simple-text logo-mini"
-        >
-          <div className="logo-img">
-            <img src={logo} alt="react-logo" />
-          </div>
-        </a>
-        <a
-        // href="https://www.creative-tim.com"
-        // className="simple-text logo-normal"
-        >
-          {/* Creative Tim */}
-        </a>
+        <div className="logo-img">
+          <img src={logo} alt="react-logo" />
+        </div>
       </div>
       <div className="sidebar-wrapper" ref={sidebar}>
         <Nav>
-          {/* <li
-            className={activeRoute("/admin") + (null ? " active-pro" : "")}
-            key="0"
-          >
-            <NavLink
-              to="/admin/dashboard"
-              className="nav-link"
-              activeClassName="active"
-            >
-              <p>Workout Library</p>
-            </NavLink>
-          </li> */}
           {props.routes.map((prop, key) => {
-            return prop.type === "program" ? (
-              <li
-                className={
-                  activeRoute(prop.path) + (prop.pro ? " active-pro" : "")
-                }
-                key={key}
-              >
-                <NavLink
-                  to={prop.layout + prop.path}
-                  className="nav-link"
-                  activeClassName="active"
-                >
-                  <i className={prop.icon} />
-                  <p>{prop.name}</p>
-                </NavLink>
-                <ul>
-                  {prop.clients.map((prop, key) => {
-                    return (
-                      <li
-                        className={
-                          activeRoute(prop.path) +
-                          (prop.pro ? " active-pro" : "")
-                        }
-                        key={"client"+key}
-                      >
-                        <NavLink
-                          to={"/client/" + prop.name}
-                          className="nav-link"
-                          activeClassName="active"
-                        >
-                          <p>{prop.name}</p>
-                        </NavLink>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </li>
-            ) : (
-              <li
-                className={
-                  activeRoute(prop.path) + (prop.pro ? " active-pro" : "")
-                }
-                key={key}
-              >
+            return (
+              <li className={activeRoute(prop.path)} key={key}>
                 <NavLink
                   to={prop.layout + prop.path}
                   className="nav-link"
@@ -137,6 +72,32 @@ function Sidebar(props) {
               </li>
             );
           })}
+          <li>
+            <ClientTitleContainter>
+              <p>CLIENTS</p>
+              <RefreshContainer>
+                  <FiRefreshCcw
+                    onClick={() => {
+                      console.log("hello");
+                      props.refreshClients();
+                    }}
+                  />
+              </RefreshContainer>
+            </ClientTitleContainter>
+          </li>
+          {props.clients.map((c) => {
+            return (
+              <li className={activeRoute(`/admin/client/${c.key}`)} key={c.key}>
+                <NavLink
+                  to={`/admin/client/${c.key}`}
+                  className="nav-link"
+                  activeClassName="active"
+                >
+                  {c.firstName} {c.lastName}
+                </NavLink>
+              </li>
+            );
+          })}
         </Nav>
       </div>
     </div>
@@ -144,3 +105,20 @@ function Sidebar(props) {
 }
 
 export default Sidebar;
+
+const ClientTitleContainter = styled.div`
+  margin: 10px 15px 0px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  color: pink;
+`;
+
+const RefreshContainer = styled.button`
+  padding: 0px 10px;
+  border: none;
+  background: none;
+  color: pink;
+`;

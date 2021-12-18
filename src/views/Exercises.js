@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardBody,
@@ -10,37 +10,33 @@ import {
   Input,
   Button,
 } from "reactstrap";
+import { getClientWeek } from "repositories/Client";
 
-let tempExercises = [
-  {
-    name: "Crunch",
-    url: "https://www.youtube.com/watch?v=zbt1g9WX6bA",
-  },
-  {
-    name: "Push Up",
-    url: "https://www.youtube.com/watch?v=zbt1g9WX6bA",
-  },
-  {
-    name: "Lunge",
-    url: "https://www.youtube.com/watch?v=zbt1g9WX6bA",
-  },
-  {
-    name: "Squat",
-    url: "https://www.youtube.com/watch?v=zbt1g9WX6bA",
-  },
-];
+import {getExercisesRepo, addExercisesRepo} from "../repositories/Exercises";
 
 function Exercises(props) {
-  const [exercises, setExercises] = useState(tempExercises);
-  const handleSubmit = (event) => {
+  const [exercises, setExercises] = useState([]);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    let temp =[...exercises];
-    temp.push({
-      name: event.target.exerciseInput.value,
-      url: event.target.urlInput.value,
-    })
-    setExercises(temp);
+    const exercise = {
+      name : event.target.exerciseInput.value,
+      url : event.target.urlInput.value
+    }
+    const exerciseList = await addExercisesRepo(exercise);
+    setExercises([...exerciseList]);
+
+    event.target.reset();
   };
+
+  async function getExercises(){
+    const exerciseList = await getExercisesRepo();
+    setExercises(exerciseList);
+  }
+
+  useEffect(() => {
+    getExercises();
+  }, []);
 
   return (
     <>
@@ -87,11 +83,13 @@ function Exercises(props) {
           <CardBody>
             <Table>
               <thead className="text-primary">
-                <th>Exercise Name</th>
-                <th>URL</th>
+                <tr>
+                  <th>Exercise Name</th>
+                  <th>URL</th>
+                </tr>
               </thead>
               <tbody>
-                {exercises.map((prop, key) => {
+                {exercises==null?<div></div>:exercises.map((prop, key) => {
                   return (
                     <tr>
                       <td>{prop.name}</td>

@@ -45,50 +45,5 @@ var routes = [
     component: Programs,
     layout: "/admin",
   },
-
-  {
-    type: "program",
-    path: "/homeworkclub",
-    name: "Homework Club",
-    // icon: "nc-icon nc-bell-55",
-    component: Program,
-    layout: "/admin",
-    clients: [
-      {
-        name: "Client 1",
-      },
-      {
-        name: "Client 2"
-      },
-    ]
-  },
-
-  {
-    path: "/client",
-    name: "Client A",
-    // icon: "nc-icon nc-bell-55",
-    component: Client,
-    layout: "/admin",
-  },
-
-  // //Workout page 
-  // {
-  //   path: "/Workout",
-  //   name: "Add Workout",
-  //   // icon: "FaDumbbell",
-  //   component: UserPage,
-  //   layout: "/admin",
-  // },
-
-  // //Habits page
-  // {
-  //   path: "/Habits",
-  //   name: "Add Habits",
-  //   // icon: "nc-icon nc-tile-56",
-  //   component: TableList,
-  //   layout: "/admin",
-  // },
-
-
 ];
 export default routes;

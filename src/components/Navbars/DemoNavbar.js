@@ -38,10 +38,13 @@ import {
 
 import routes from "routes.js";
 
+import { getClient } from "repositories/Client";
+
 function Header(props) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
   const [color, setColor] = React.useState("transparent");
+  const [title, setTitle] = React.useState("Xuan Fitness")
   const sidebarToggle = React.useRef();
   const location = useLocation();
   const toggle = () => {
@@ -55,15 +58,22 @@ function Header(props) {
   const dropdownToggle = (e) => {
     setDropdownOpen(!dropdownOpen);
   };
-  const getBrand = () => {
-    let brandName = "Default Brand";
+  const getBrand = async() => {
+    let brandName = "Xuan Fitness";
+    if(window.location.href.indexOf("client") !== -1){
+      const id = window.location.pathname.split("/").pop();
+      const client = await getClient(id);
+      brandName = `${client.firstName} ${client.lastName}`
+      setTitle(brandName);
+    }
     routes.map((prop, key) => {
       if (window.location.href.indexOf(prop.layout + prop.path) !== -1) {
         brandName = prop.name;
       }
       return null;
     });
-    return brandName;
+    
+    setTitle(brandName);
   };
   const openSidebar = () => {
     document.documentElement.classList.toggle("nav-open");
@@ -89,6 +99,9 @@ function Header(props) {
       sidebarToggle.current.classList.toggle("toggled");
     }
   }, [location]);
+  React.useEffect(()=>{
+    getBrand();
+  },[window.location.href])
   return (
     // add or remove classes depending if we are on full-screen-maps page or not
     <Navbar
@@ -119,7 +132,7 @@ function Header(props) {
               <span className="navbar-toggler-bar bar3" />
             </button>
           </div>
-          <NavbarBrand href="/">{getBrand()}</NavbarBrand>
+          <NavbarBrand href="/">{title}</NavbarBrand>
         </div>
         <NavbarToggler onClick={toggle}>
           <span className="navbar-toggler-bar navbar-kebab" />
@@ -127,32 +140,14 @@ function Header(props) {
           <span className="navbar-toggler-bar navbar-kebab" />
         </NavbarToggler>
         <Collapse isOpen={isOpen} navbar className="justify-content-end">
-          <form>
-            <InputGroup className="no-border">
-              <Input placeholder="Search..." />
-              <InputGroupAddon addonType="append">
-                <InputGroupText>
-                  <i className="nc-icon nc-zoom-split" />
-                </InputGroupText>
-              </InputGroupAddon>
-            </InputGroup>
-          </form>
           <Nav navbar>
-            <NavItem>
-              <Link to="#pablo" className="nav-link btn-magnify">
-                <i className="nc-icon nc-layout-11" />
-                <p>
-                  <span className="d-lg-none d-md-block">Stats</span>
-                </p>
-              </Link>
-            </NavItem>
             <Dropdown
               nav
               isOpen={dropdownOpen}
               toggle={(e) => dropdownToggle(e)}
             >
               <DropdownToggle caret nav>
-                <i className="nc-icon nc-bell-55" />
+                <i className="nc-icon nc-settings-gear-65" />
                 <p>
                   <span className="d-lg-none d-md-block">Some Actions</span>
                 </p>
@@ -163,14 +158,6 @@ function Header(props) {
                 <DropdownItem tag="a">Something else here</DropdownItem>
               </DropdownMenu>
             </Dropdown>
-            <NavItem>
-              <Link to="#pablo" className="nav-link btn-rotate">
-                <i className="nc-icon nc-settings-gear-65" />
-                <p>
-                  <span className="d-lg-none d-md-block">Account</span>
-                </p>
-              </Link>
-            </NavItem>
           </Nav>
         </Collapse>
       </Container>

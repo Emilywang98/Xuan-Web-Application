@@ -27,11 +27,15 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 import AdminLayout from "layouts/Admin.js";
 
+import { initializeApp } from 'firebase/app';
+import firebaseConfig from './firebase.json';
+
+const app = initializeApp(firebaseConfig);
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
       <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Redirect to="/admin/dashboard" />
+      <Redirect to="/admin/exercises" />
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")

@@ -24,15 +24,16 @@ import { Route, Switch, useLocation } from "react-router-dom";
 import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
-import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
+
+import Client from "views/Client.js";
+import { getClients } from "repositories/Client";
 
 import routes from "routes.js";
 
 var ps;
 
 function Dashboard(props) {
-  const [backgroundColor, setBackgroundColor] = React.useState("black");
-  const [activeColor, setActiveColor] = React.useState("info");
+  const [clients, setClients] = React.useState([]);
   const mainPanel = React.useRef();
   const location = useLocation();
   React.useEffect(() => {
@@ -51,19 +52,23 @@ function Dashboard(props) {
     mainPanel.current.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
   }, [location]);
-  const handleActiveClick = (color) => {
-    setActiveColor(color);
+
+  const loadClients = async () => {
+    const tempClients = await getClients();
+    console.log(tempClients);
+    setClients(tempClients);
   };
-  const handleBgClick = (color) => {
-    setBackgroundColor(color);
-  };
+
+  React.useEffect(() => {
+    loadClients();
+  }, []);
   return (
     <div className="wrapper">
       <Sidebar
         {...props}
         routes={routes}
-        bgColor={backgroundColor}
-        activeColor={activeColor}
+        clients={clients}
+        refreshClients={()=>loadClients()}
       />
       <div className="main-panel" ref={mainPanel}>
         <DemoNavbar {...props} />
@@ -77,15 +82,19 @@ function Dashboard(props) {
               />
             );
           })}
+          {clients.map((c) => {
+            return (
+              <Route
+                path={"/admin/client/:id"}
+                exact={true}
+                component={Client}
+                key={c.key}
+              />
+            );
+          })}
         </Switch>
         <Footer fluid />
       </div>
-      <FixedPlugin
-        bgColor={backgroundColor}
-        activeColor={activeColor}
-        handleActiveClick={handleActiveClick}
-        handleBgClick={handleBgClick}
-      />
     </div>
   );
 }

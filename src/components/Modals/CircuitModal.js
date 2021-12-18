@@ -11,19 +11,19 @@ import {
     Row,
     Col,
   } from "reactstrap";
-import ExerciseExerciseCard from '../Exercise/Exercise/ExerciseExerciseCard';
+import ExerciseCircuitCard from 'components/Exercise/Circuit/ExerciseCircuitCard';
 
 
-const ExerciseModal = (props) => {
+const CircuitModal = (props) => {
     return (
         <Modal isOpen={props.activeModal} >
-            <ExerciseExerciseCard
-              addExercise={props.addExercise}
+            <ExerciseCircuitCard
+              addCircuit={props.addCircuit}
               toggleModal={props.toggleModal}
-              exercise={props.exercise}
+              circuit={props.circuit}
             />
         </Modal>
     )
 }
 
-export default ExerciseModal;
+export default CircuitModal;

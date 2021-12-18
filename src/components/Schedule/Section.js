@@ -1,39 +1,39 @@
-import React, { useState, useEffect } from 'react'
-import { ListGroup, ListGroupItem, Button } from 'reactstrap';
-import NewExercise from './NewExercise';
-import Exercise from './Exercise';
+import React, { useState, useEffect } from "react";
+import { ListGroup, Button } from "reactstrap";
+import SectionEntryModal from "components/Modals/SectionEntryModal";
+import EntryListView from "components/Exercise/SectionEntryListView";
 
-const Section = () => {
+const Section = (props) => {
+  const [entries, setEntries] = useState([]);
+  const [activeModal, setActiveModal] = useState(false);
 
-    const [exercises, setExercises] = useState([]);
-    const [displayTextBox, setDisplayTextBox] = useState(false);
+  const addEntry = (e) => {
+    console.log("new exercise");
+    console.log(e);
+    setEntries([...entries, e]);
+  };
 
-    const addExercise = (text) => {
-        setExercises([...exercises, text]);
-    }
+  const toggleModal = () => {
+    setActiveModal(!activeModal);
+  };
 
-    // change this to display the modal; input some indicator of what section you're in
-    // also remove the text box
-    const displayInput = () => {
-        setDisplayTextBox(true);
-    }
+  useEffect(() => {}, [entries]);
 
-    useEffect(() => {
-
-    }, [exercises])
-
-    return (
-        <div>
-            <ListGroup>
-                {exercises.map((exercise) => {
-                    return <Exercise name={exercise} />
-                })}
-                {(displayTextBox && <NewExercise addExer={(text) => addExercise(text)} toggleDisplay={() => setDisplayTextBox(false)} />)}
-                {(!displayTextBox && <Button onClick={() => displayInput()}>Add Exercise</Button>)}
-            </ListGroup>
-        </div>
-    )
-}
-
+  return (
+    <div>
+      <SectionEntryModal
+        addEntry={addEntry}
+        activeModal={activeModal}
+        toggleModal={toggleModal}
+      />
+      <ListGroup>
+        {entries.map((entry) => {
+          return <EntryListView entry={entry} />;
+        })}
+        <Button onClick={() => toggleModal()}>Add Exercise</Button>
+      </ListGroup>
+    </div>
+  );
+};
 
 export default Section;
